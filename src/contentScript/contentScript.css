@@ -1,0 +1,7 @@
+.overlayCard{
+  position: fixed;
+  left: 5%;
+  top: 15%;
+  background-color: aquamarine;
+  z-index: 99999;
+}

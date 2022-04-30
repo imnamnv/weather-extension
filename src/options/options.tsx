@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   Grid,
+  Switch,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -46,6 +47,13 @@ const App: React.FC<{}> = () => {
     });
   };
 
+  const handleSwitchShowOverlayChange = (hasAutoOverlay: boolean) => {
+    setOptions({
+      ...options,
+      hasAutoOverlay,
+    });
+  };
+
   const isFieldsDisable = formState === "saving";
 
   if (!options) return null;
@@ -67,6 +75,17 @@ const App: React.FC<{}> = () => {
                 fullWidth
                 placeholder="Enter a home city name"
                 disabled={isFieldsDisable}
+              />
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">Show Overlay</Typography>
+              <Switch
+                checked={options.hasAutoOverlay}
+                onChange={(event, checked) => {
+                  handleSwitchShowOverlayChange(checked);
+                }}
+                disabled={isFieldsDisable}
+                color="primary"
               />
             </Grid>
             <Grid item>

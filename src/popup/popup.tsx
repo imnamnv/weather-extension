@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import "./popup.css";
-import WeatherCard from "./WeatherCard";
+import WeatherCard from "../components/WeatherCard";
 import { InputBase, IconButton, Paper, Box, Grid } from "@material-ui/core";
-import { Add as AddIcon } from "@material-ui/icons";
+import { Add as AddIcon, PictureInPicture } from "@material-ui/icons";
 import {
   setStoredCities,
   getStoredCities,
@@ -11,6 +11,8 @@ import {
   getStoredOptions,
   LocalStorageOptions,
 } from "../utils/storage";
+
+import { Messages } from "../utils/messages";
 
 const App: React.FC<{}> = () => {
   const [cities, setCities] = useState<string[]>(["Hanoi", "Tokyo", "Error"]);
@@ -52,11 +54,24 @@ const App: React.FC<{}> = () => {
       ...options,
       tempScale: options.tempScale === "metric" ? "imperial" : "metric",
     };
-    console.log("updateOptions", updateOptions);
 
     setStoredOptions(updateOptions).then(() => {
       setOptions(updateOptions);
     });
+  };
+
+  const handleOverlayButtonClick = () => {
+    chrome.tabs.query(
+      {
+        active: true,
+        currentWindow: true,
+      },
+      (tabs) => {
+        if (tabs.length > 0) {
+          chrome.tabs.sendMessage(tabs[0].id, Messages.TOGGLE_OVERLAY);
+        }
+      }
+    );
   };
 
   if (!options) {
@@ -65,7 +80,7 @@ const App: React.FC<{}> = () => {
 
   return (
     <Box>
-      <Grid container justify="space-evenly">
+      <Grid container wrap="nowrap" justifyContent="space-evenly">
         <Grid item>
           <Paper>
             <Box px={"15px"} py={"5px"}>
@@ -85,6 +100,15 @@ const App: React.FC<{}> = () => {
             <Box py={"4px"}>
               <IconButton onClick={handleTempScaleButtonClick}>
                 {options.tempScale === "metric" ? "\u2103" : "\u2109"}
+              </IconButton>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item>
+          <Paper>
+            <Box py={"6px"}>
+              <IconButton onClick={handleOverlayButtonClick}>
+                <PictureInPicture />
               </IconButton>
             </Box>
           </Paper>
