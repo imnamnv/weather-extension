@@ -8,9 +8,10 @@ const App: React.FC<{}> = () => {
   const [options, setOptions] = useState<LocalStorageOptions | null>(null);
   const [isActive, setIsActive] = useState<boolean>(false);
 
-  const handleMessages = (msg: Messages) => {
+  const handleMessages = (msg: Messages, sender, sendResponse) => {
     if (msg === Messages.TOGGLE_OVERLAY) {
       setIsActive(!isActive);
+      sendResponse();
     }
   };
 

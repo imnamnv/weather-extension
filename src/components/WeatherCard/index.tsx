@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchOpenWeatherData,
+  getWeatherIconSrc,
   OpenWeatherData,
   OpenWeatherTempScale,
 } from "../../utils/api";
@@ -10,8 +11,10 @@ import {
   Card,
   CardActions,
   CardContent,
+  Grid,
   Typography,
 } from "@material-ui/core";
+import "./WeatherCard.css";
 
 const WeatherCardContainer: React.FC<{
   children: React.ReactNode;
@@ -65,11 +68,30 @@ const WeatherCard: React.FC<{
   }
   return (
     <WeatherCardContainer onDelete={onDelete}>
-      <Typography variant="h5">{weatherData.name}</Typography>
-      <Typography variant="body1">{weatherData.main.temp}</Typography>
-      <Typography variant="body1">
-        Feels like: {weatherData.main.feels_like}
-      </Typography>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <Grid item>
+          <Typography variant="h5">{weatherData.name}</Typography>
+          <Typography className="weatherCard-temp" variant="body1">
+            {weatherData.main.temp}
+          </Typography>
+          <Typography variant="body1">
+            Feels like: {weatherData.main.feels_like}
+          </Typography>
+        </Grid>
+        <Grid item>
+          {weatherData.weather.length > 0 && (
+            <>
+              <img
+                src={getWeatherIconSrc(weatherData.weather[0].icon)}
+                alt=""
+              />
+              <Typography variant="body1">
+                {weatherData.weather[0].main}
+              </Typography>
+            </>
+          )}
+        </Grid>
+      </Grid>
     </WeatherCardContainer>
   );
 };
